@@ -1,7 +1,14 @@
-import ReactDOM from 'react-dom/client';
+import {createRoot} from 'react-dom/client';
+import Modal from 'react-modal';
+
+import {appStarted} from '~/shared/config/init';
 
 import App from './app';
 
-window.eel.set_host('ws://localhost:8080');
+const container = document.getElementById('root') as HTMLElement;
+const root = createRoot(container);
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<App />);
+appStarted();
+
+Modal.setAppElement(container);
+root.render(<App />);

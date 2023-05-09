@@ -11,7 +11,7 @@ export type CreateServerParams = {
   host: string;
   username: string;
   password: string;
-}
+};
 
 export const createServer = async (params: CreateServerParams): Promise<Server> => {
   // @ts-ignore
@@ -20,7 +20,7 @@ export const createServer = async (params: CreateServerParams): Promise<Server> 
 
 export type DeleteServerParams = {
   id: string;
-}
+};
 
 export const deleteServer = (params: DeleteServerParams) => {
   return apiInstance.del_server(params);
@@ -28,7 +28,7 @@ export const deleteServer = (params: DeleteServerParams) => {
 
 export type StartServerParams = {
   id: string;
-}
+};
 
 export const startServer = (params: StartServerParams) => {
   return apiInstance.start_server(params);

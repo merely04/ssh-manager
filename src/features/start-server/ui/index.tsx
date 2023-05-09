@@ -1,10 +1,11 @@
-import styles from './index.module.scss';
 import {GoZap} from 'react-icons/go';
+
 import {startServerModel} from '..';
+import styles from './index.module.scss';
 
 export type StartServerButton = {
   serverId: string;
-}
+};
 
 export const StartServerButton = ({serverId}: StartServerButton) => {
   function onButtonClick() {
@@ -13,7 +14,7 @@ export const StartServerButton = ({serverId}: StartServerButton) => {
 
   return (
     <button onClick={onButtonClick} className={styles.button}>
-      <GoZap size={16}/>
+      <GoZap size={16} />
     </button>
   );
 };

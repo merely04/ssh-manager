@@ -1,4 +1,5 @@
 import {createEvent, sample} from 'effector';
+
 import {serverModel} from '../../../entities/server';
 import {localApi} from '../../../shared/api';
 

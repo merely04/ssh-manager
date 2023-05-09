@@ -4,4 +4,4 @@ export type Server = {
   host: string;
   username: string;
   password: string;
-}
+};

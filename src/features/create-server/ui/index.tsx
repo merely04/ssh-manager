@@ -30,15 +30,19 @@ export const CreateServerModal = ({isOpen, handleClose}: CreateServerModalProps)
       </button>
     </header>
 
-    <form className={styles.row} onSubmit={handleSubmit((data) => createServerModel.events.createServer(data))}>
+    <form style={{marginTop: 20}} className={styles.row}
+          onSubmit={handleSubmit(async (data) => {
+            await createServerModel.events.createServer(data);
+            handleClose();
+          })}>
       <input className={styles.input} {...register('name', {required: true})} placeholder="Название"/>
       {errors.name && <p>Придумайте название</p>}
-      <input className={styles.input} {...register('host', {required: true})} placeholder="Хост / адресс"/>
-      {errors.host && <p>Заполните имя хост / адресс</p>}
+      <input className={styles.input} {...register('host', {required: true})} placeholder="Хост / адрес"/>
+      {errors.host && <p>Заполните имя хост / адрес</p>}
       <input className={styles.input} {...register('username', {required: true})} placeholder="Пользователь"/>
       {errors.username && <p>Заполните имя пользователя</p>}
-      <input className={styles.input} {...register('password', {required: true})} type="Пароль"
-             placeholder="password"/>
+      <input className={styles.input} {...register('password', {required: true})} type="password"
+             placeholder="Пароль"/>
       {errors.password && <p>Заполните пароль пользователя</p>}
 
       <button type="submit" className={styles.create}>Создать</button>

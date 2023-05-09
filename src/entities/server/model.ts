@@ -1,7 +1,8 @@
-import {combine, createEffect, createEvent, createStore, sample} from 'effector';
-import {localApi} from '../../../shared/api';
+import {createEffect, createEvent, createStore, sample} from 'effector';
 
-const pageMount = createEvent();
+import {localApi} from '~/shared/api';
+
+const pageMounted = createEvent();
 
 const getServersListFx = createEffect(async () => {
   return localApi.servers.getServersList();
@@ -24,23 +25,24 @@ export const $servers = createStore<localApi.Server[]>([])
   .on(getServersListFx.doneData, (_, payload) => payload)
   .on(createServerFx.doneData, (state, payload) => ({
     ...state,
-    payload
-  }))
-  .on(deleteServerFx.doneData, (state, payload) => ({
-    ...state.filter(s => s.id !== payload)
+    payload,
   }));
 
-export const $serversList = combine($servers, (servers) => Object.values(servers));
 export const $serversLoading = getServersListFx.pending;
-export const $serversEmpty = $serversList.map((servers) => servers.length === 0);
+export const $serversEmpty = $servers.map((servers) => servers.length === 0);
 
 sample({
-  clock: pageMount,
+  clock: pageMounted,
+  target: getServersListFx,
+});
+
+sample({
+  clock: deleteServerFx,
   target: getServersListFx,
 });
 
 export const events = {
-  pageMount,
+  pageMounted,
 };
 
 export const effects = {

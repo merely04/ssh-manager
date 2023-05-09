@@ -1,6 +1,8 @@
 import uuid
 import eel
+import subprocess
 from peewee import *
+from os import system
 
 DATABASE = 'appdata.db'
 
@@ -33,7 +35,7 @@ def get_servers():
 
 @eel.expose
 def add_server(data):
-    server = Server.create(name=data["name"], host=data["host"], username=data["username"], password=data["password"])
+    server = Server.create(id=str(uuid.uuid4()), name=data["name"], host=data["host"], username=data["username"], password=data["password"])
     return {
         "id": server.id,
         "name": server.name,
@@ -50,11 +52,20 @@ def del_server(data):
         server.delete_instance()
 
 
+def ssh_connect(host, username, password):
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(hostname=host, username=username, password=password)
+    return client
+
+
 @eel.expose
 def start_server(data):
+    print(123)
     server = Server.get_by_id(data["id"])
+    print(server)
     if not server:
         return
 
-    # TODO: Implement "start ssh session" method
-    print("starting ssh session here...")
+    command = f'start c:/putty.exe -ssh {server.username}@{server.host} -pw {server.password}'
+    system(command)

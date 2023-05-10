@@ -2,9 +2,10 @@ import {useForm} from 'react-hook-form';
 import {GoX} from 'react-icons/go';
 import Modal from 'react-modal';
 
-import {createServerModel} from '..';
-import {localApi} from '../../../shared/api';
-import styles from './index.module.scss';
+import {CreateServer} from '~/shared/api';
+
+import {submit} from '../model';
+import cls from './index.module.scss';
 
 export type CreateServerModalProps = {
   isOpen: boolean;
@@ -16,57 +17,57 @@ export const CreateServerModal = ({isOpen, handleClose}: CreateServerModalProps)
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<localApi.servers.CreateServerParams>();
+  } = useForm<CreateServer>();
 
   return (
     <Modal
-      className={styles.modal}
-      overlayClassName={styles.overlay}
+      className={cls.modal}
+      overlayClassName={cls.overlay}
       isOpen={isOpen}
       onRequestClose={handleClose}
     >
-      <header className={styles.header}>
+      <header className={cls.header}>
         <h2>Create Server</h2>
-        <button className={styles.close} onClick={handleClose}>
+        <button className={cls.close} onClick={handleClose}>
           <GoX size={16} />
         </button>
       </header>
 
       <form
         style={{marginTop: 20}}
-        className={styles.row}
+        className={cls.row}
         onSubmit={handleSubmit(async (data) => {
-          await createServerModel.events.createServer(data);
+          await submit(data);
           handleClose();
         })}
       >
         <input
-          className={styles.input}
+          className={cls.input}
           {...register('name', {required: true})}
           placeholder="Название"
         />
         {errors.name && <p>Придумайте название</p>}
         <input
-          className={styles.input}
+          className={cls.input}
           {...register('host', {required: true})}
           placeholder="Хост / адрес"
         />
         {errors.host && <p>Заполните имя хост / адрес</p>}
         <input
-          className={styles.input}
+          className={cls.input}
           {...register('username', {required: true})}
           placeholder="Пользователь"
         />
         {errors.username && <p>Заполните имя пользователя</p>}
         <input
-          className={styles.input}
+          className={cls.input}
           {...register('password', {required: true})}
           type="password"
           placeholder="Пароль"
         />
         {errors.password && <p>Заполните пароль пользователя</p>}
 
-        <button type="submit" className={styles.create}>
+        <button type="submit" className={cls.create}>
           Создать
         </button>
       </form>

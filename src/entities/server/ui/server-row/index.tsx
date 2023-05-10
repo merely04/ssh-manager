@@ -1,10 +1,11 @@
 import {ReactNode} from 'react';
 
-import {localApi} from '../../../../shared/api';
+import * as api from '~/shared/api';
+
 import styles from './index.module.scss';
 
 type ServerRowProps = {
-  data: localApi.Server;
+  data: api.Server;
   after?: ReactNode;
 };
 

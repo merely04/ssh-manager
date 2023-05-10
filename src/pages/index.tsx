@@ -1,13 +1,9 @@
-import {Navigate, Route, Routes} from 'react-router-dom';
+import {createRoutesView} from 'atomic-router-react';
 
-import HomePage from '~/pages/home';
+import {ConnectionRoute} from '~/pages/connection';
+import {HomeRoute} from '~/pages/home';
 
-export const Routing = () => {
-  return (
-    <Routes>
-      <Route index={true} path="/" element={<HomePage />} />
-
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
-  );
-};
+export const Pages = createRoutesView({
+  routes: [HomeRoute, ConnectionRoute],
+  otherwise: () => <p>Not found</p>,
+});

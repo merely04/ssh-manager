@@ -1,0 +1,29 @@
+.input {
+  width: 100%;
+  padding: 11px 12px 10px;
+  border: 1px solid #E2E2E2;
+  border-radius: 6px;
+  appearance: none;
+  background: none;
+
+  &:focus {
+    outline: none;
+    border-color: #93C5FD;
+  }
+
+  &::placeholder {
+    color: #E2E2E2;
+  }
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.invalid {
+  border-color: red !important;
+}
+
+.center {
+  text-align: center;
+}

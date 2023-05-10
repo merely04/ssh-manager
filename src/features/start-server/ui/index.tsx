@@ -1,19 +1,22 @@
+import React, {useCallback} from 'react';
 import {GoZap} from 'react-icons/go';
 
-import {startServerModel} from '..';
-import styles from './index.module.scss';
+import {submit} from '../model';
+import cls from './index.module.scss';
 
-export type StartServerButton = {
+interface StartServerButtonProps {
   serverId: string;
-};
+}
 
-export const StartServerButton = ({serverId}: StartServerButton) => {
-  function onButtonClick() {
-    startServerModel.events.startServer({id: serverId});
-  }
+export const StartServerButton = (props: StartServerButtonProps) => {
+  const {serverId} = props;
+
+  const onButtonClick = useCallback(() => {
+    submit({id: serverId});
+  }, [serverId]);
 
   return (
-    <button onClick={onButtonClick} className={styles.button}>
+    <button onClick={onButtonClick} className={cls.button}>
       <GoZap size={16} />
     </button>
   );

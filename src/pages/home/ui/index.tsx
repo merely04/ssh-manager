@@ -1,18 +1,21 @@
 import {reflect} from '@effector/reflect';
-import {useState} from 'react';
+import {Link} from 'atomic-router-react';
+import React, {useState} from 'react';
+import {GoZap} from 'react-icons/go';
 
 import {CreateServerModal} from '~/features/create-server';
 import {DeleteServerButton} from '~/features/delete-server';
-import {StartServerButton} from '~/features/start-server';
 
 import {serverModel, ServerRow} from '~/entities/server';
 
-import {localApi} from '~/shared/api';
+import {Server} from '~/shared/api';
+import {routes} from '~/shared/routes';
+import {Container} from '~/shared/ui';
 
-import styles from './index.module.scss';
+import cls from './index.module.scss';
 
 type Props = {
-  servers: localApi.Server[];
+  servers: Server[];
   isLoading: boolean;
   isEmpty: boolean;
 };
@@ -23,14 +26,14 @@ const View = ({servers, isLoading, isEmpty}: Props) => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className={`${styles.container} ${styles.main}`}>
-      <h1 className={styles.title}>ssh manager</h1>
+    <Container className={cls.main}>
+      <h1 className={cls.title}>ssh manager</h1>
 
-      <div className={styles.main}>
-        <header className={styles.header}>
+      <div className={cls.main}>
+        <header className={cls.header}>
           Список серверов
-          <div className={styles.actions_list}>
-            <button className={styles.button} onClick={openModal}>
+          <div className={cls.actions_list}>
+            <button className={cls.button} onClick={openModal}>
               + Добавить
             </button>
             <CreateServerModal isOpen={isModalOpen} handleClose={closeModal} />
@@ -41,7 +44,7 @@ const View = ({servers, isLoading, isEmpty}: Props) => {
           {isLoading && <p>loading...</p>}
           {!isLoading && isEmpty && <p>No servers found</p>}
           {!isLoading && (
-            <div className={styles.row}>
+            <div className={cls.row}>
               {servers.map((server) => {
                 return (
                   <div key={server.id}>
@@ -49,7 +52,14 @@ const View = ({servers, isLoading, isEmpty}: Props) => {
                       data={server}
                       after={
                         <>
-                          <StartServerButton serverId={server.id} />
+                          {/*<StartServerButton serverId={server.id} />*/}
+                          <Link
+                            to={routes.connection}
+                            params={{serverId: server.id}}
+                            className={cls.button}
+                          >
+                            <GoZap size={16} />
+                          </Link>
                           <DeleteServerButton serverId={server.id} />
                         </>
                       }
@@ -61,11 +71,11 @@ const View = ({servers, isLoading, isEmpty}: Props) => {
           )}
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
-const HomePage = reflect({
+export const HomePage = reflect({
   view: View,
   bind: {
     servers: serverModel.$servers,
@@ -73,8 +83,6 @@ const HomePage = reflect({
     isEmpty: serverModel.$serversEmpty,
   },
   hooks: {
-    mounted: serverModel.events.pageMounted,
+    mounted: serverModel.pageMounted,
   },
 });
-
-export default HomePage;

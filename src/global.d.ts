@@ -1,9 +1,4 @@
-import {Server} from './shared/api/local';
-import {
-  CreateServerParams,
-  DeleteServerParams,
-  StartServerParams,
-} from './shared/api/local/servers';
+import {Command, CreateServer, SendServerCommand, Server, ServerData} from '~/shared/api';
 
 export {};
 
@@ -12,9 +7,10 @@ declare global {
     eel: {
       set_host(path: string): void;
       get_servers(): Server[];
-      add_server(params: CreateServerParams): Server;
-      del_server(params: DeleteServerParams): void;
-      start_server(params: StartServerParams): void;
+      add_server(data: CreateServer): Server;
+      del_server(data: ServerData): void;
+      connect_server(data: SendServerCommand): Command;
+      send_server_command(data: SendServerCommand): Command;
     };
   }
 }

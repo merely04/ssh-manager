@@ -1,53 +1,48 @@
-import {createEffect, createEvent, createStore, sample} from 'effector';
+import {attach, createEvent, createStore, sample} from 'effector';
 
-import {localApi} from '~/shared/api';
+import * as api from '~/shared/api';
+import {CreateServer, ServerData} from '~/shared/api';
 
-const pageMounted = createEvent();
+export const getServersFx = attach({effect: api.getServersFx});
 
-const getServersListFx = createEffect(async () => {
-  return localApi.servers.getServersList();
-});
+const createServerFx = attach({effect: api.createServerFx});
 
-const createServerFx = createEffect((params: localApi.servers.CreateServerParams) => {
-  return localApi.servers.createServer(params);
-});
+const deleteServerFx = attach({effect: api.deleteServerFx});
 
-const deleteServerFx = createEffect((params: localApi.servers.DeleteServerParams) => {
-  localApi.servers.deleteServer(params);
-  return params.id;
-});
+const connectServerFx = attach({effect: api.connectServerFx});
 
-const startServerFx = createEffect((params: localApi.servers.StartServerParams) => {
-  localApi.servers.startServer(params);
-});
+export const pageMounted = createEvent();
 
-export const $servers = createStore<localApi.Server[]>([])
-  .on(getServersListFx.doneData, (_, payload) => payload)
-  .on(createServerFx.doneData, (state, payload) => ({
-    ...state,
-    payload,
-  }));
+export const createServer = createEvent<CreateServer>();
 
-export const $serversLoading = getServersListFx.pending;
+export const connectServer = createEvent<ServerData>();
+
+export const deleteServer = createEvent<ServerData>();
+
+export const $servers = createStore<api.Server[]>([])
+  .on(getServersFx.doneData, (_, payload) => payload)
+  .on(createServerFx.doneData, (state, payload) => [...state, payload])
+  .on(deleteServerFx.done, (state, payload) => state.filter((s) => s.id !== payload.params.id));
+
+export const $serversLoading = getServersFx.pending;
 export const $serversEmpty = $servers.map((servers) => servers.length === 0);
 
 sample({
   clock: pageMounted,
-  target: getServersListFx,
+  target: getServersFx,
 });
 
 sample({
-  clock: deleteServerFx,
-  target: getServersListFx,
+  clock: connectServer,
+  target: connectServerFx,
 });
 
-export const events = {
-  pageMounted,
-};
+sample({
+  clock: deleteServer,
+  target: deleteServerFx,
+});
 
-export const effects = {
-  getServersListFx,
-  createServerFx,
-  deleteServerFx,
-  startServerFx,
-};
+sample({
+  clock: createServer,
+  target: createServerFx,
+});

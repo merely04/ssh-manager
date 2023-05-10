@@ -1,11 +1,12 @@
 import {createHistoryRouter, createRoute, createRouterControls} from 'atomic-router';
 import {sample} from 'effector';
-import {createBrowserHistory} from 'history';
+import {createMemoryHistory} from 'history';
 
 import {appStarted} from '~/shared/config/init';
 
 export const routes = {
   home: createRoute(),
+  connection: createRoute<{serverId: string}>({}),
 };
 
 export const controls = createRouterControls();
@@ -16,11 +17,16 @@ export const router = createHistoryRouter({
       path: '/',
       route: routes.home,
     },
+    {
+      path: '/connection/:serverId',
+      route: routes.connection,
+    },
   ],
+  controls,
 });
 
 sample({
   clock: appStarted,
-  fn: () => createBrowserHistory(),
+  fn: () => createMemoryHistory(), //createBrowserHistory(),
   target: router.setHistory,
 });

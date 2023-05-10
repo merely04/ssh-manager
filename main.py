@@ -1,11 +1,9 @@
-import sys, io
-
-buffer = io.StringIO()
-sys.stdout = sys.stderr = buffer
+import sys
 
 import eel
 
-from database.database import database, create_tables
+from server import commands
+from server.database import database, create_tables
 
 if __name__ == "__main__":
     database.connect()
@@ -16,11 +14,11 @@ if __name__ == "__main__":
         page = {"port": 4000}
         mode = False
     else:
-        directory = "dist"
+        directory = "web"
         page = "index.html"
         mode = "chrome"
 
-    eel_kwargs = dict(host="localhost", port=8080, size=(1280, 800))
+    eel_kwargs = dict(host="localhost", port=8080, size=(800, 640))
 
     eel.init(directory)
     eel.start(page, mode=mode, **eel_kwargs)

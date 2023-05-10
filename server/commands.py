@@ -1,9 +1,9 @@
 import uuid
-from os import system
 
-import eel as eel
+import eel
 
-from database.database import Server
+from server.ssh import exec_command
+from server.database import Server
 
 
 @eel.expose
@@ -38,11 +38,30 @@ def del_server(data):
 
 
 @eel.expose
-def start_server(data):
+def connect_server(data):
     server = Server.get_by_id(data["id"])
-    print(server)
     if not server:
         return
 
-    command = f'start c:/putty.exe -ssh {server.username}@{server.host} -pw {server.password}'
-    system(command)
+    command = data['command']
+    output = exec_command(server, command)
+
+    return {
+        "user": command,
+        "server": output,
+    }
+
+
+@eel.expose
+def send_server_command(data):
+    server = Server.get_by_id(data["id"])
+    if not server:
+        return
+
+    command = data['command']
+    output = exec_command(server, command)
+
+    return {
+        "user": command,
+        "server": output,
+    }

@@ -7,6 +7,7 @@ import {appStarted} from '~/shared/config/init';
 export const routes = {
   home: createRoute(),
   connection: createRoute<{serverId: string}>({}),
+  error: createRoute(),
 };
 
 export const controls = createRouterControls();
@@ -20,6 +21,10 @@ export const router = createHistoryRouter({
     {
       path: '/connection/:serverId',
       route: routes.connection,
+    },
+    {
+      path: '/error',
+      route: routes.error,
     },
   ],
   controls,

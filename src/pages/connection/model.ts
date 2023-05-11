@@ -35,6 +35,13 @@ sample({
 function chainPostData<Params extends RouteParams>(
   route: RouteInstance<Params>,
 ): RouteInstance<Params> {
+  sample({
+    clock: connectionModel.connectServerFx.fail,
+    source: {params: route.$params, query: route.$query},
+    filter: route.$isOpened,
+    target: routes.error.open,
+  });
+
   return chainRoute({
     route,
     beforeOpen: {

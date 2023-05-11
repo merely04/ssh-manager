@@ -14,7 +14,7 @@ export const Input = (props: InputProps) => {
 
   const mods = {
     [cls.disabled]: disabled,
-    [cls.invlid]: isInvalid,
+    [cls.invalid]: isInvalid,
     [cls.center]: center,
   };
 

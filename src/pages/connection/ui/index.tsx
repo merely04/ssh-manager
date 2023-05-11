@@ -46,7 +46,7 @@ const View = (props: Props) => {
         <h1>{params.serverId}</h1>
       </header>
 
-      <main>
+      <main style={{marginTop: 20}}>
         <div className={cls.log} ref={boxRef}>
           {messages.map((message, index) => (
             <div key={index}>

@@ -1,18 +1,18 @@
 .input {
   width: 100%;
   padding: 11px 12px 10px;
-  border: 1px solid #E2E2E2;
+  border: 1px solid var(--color-text);
   border-radius: 6px;
   appearance: none;
   background: none;
 
   &:focus {
     outline: none;
-    border-color: #93C5FD;
+    border-color: var(--color-accent);
   }
 
   &::placeholder {
-    color: #E2E2E2;
+    color: #d2d2d2;
   }
 }
 

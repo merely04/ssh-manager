@@ -3,6 +3,7 @@ import {GoX} from 'react-icons/go';
 import Modal from 'react-modal';
 
 import {CreateServer} from '~/shared/api';
+import {Input} from '~/shared/ui';
 
 import {submit} from '../model';
 import cls from './index.module.scss';
@@ -27,7 +28,7 @@ export const CreateServerModal = ({isOpen, handleClose}: CreateServerModalProps)
       onRequestClose={handleClose}
     >
       <header className={cls.header}>
-        <h2>Create Server</h2>
+        <h2>Добавление сервера</h2>
         <button className={cls.close} onClick={handleClose}>
           <GoX size={16} />
         </button>
@@ -41,30 +42,13 @@ export const CreateServerModal = ({isOpen, handleClose}: CreateServerModalProps)
           handleClose();
         })}
       >
-        <input
-          className={cls.input}
-          {...register('name', {required: true})}
-          placeholder="Название"
-        />
+        <Input {...register('name', {required: true})} placeholder="Название" />
         {errors.name && <p>Придумайте название</p>}
-        <input
-          className={cls.input}
-          {...register('host', {required: true})}
-          placeholder="Хост / адрес"
-        />
+        <Input {...register('host', {required: true})} placeholder="Хост / адрес" />
         {errors.host && <p>Заполните имя хост / адрес</p>}
-        <input
-          className={cls.input}
-          {...register('username', {required: true})}
-          placeholder="Пользователь"
-        />
+        <Input {...register('username', {required: true})} placeholder="Пользователь" />
         {errors.username && <p>Заполните имя пользователя</p>}
-        <input
-          className={cls.input}
-          {...register('password', {required: true})}
-          type="password"
-          placeholder="Пароль"
-        />
+        <Input {...register('password', {required: true})} type="password" placeholder="Пароль" />
         {errors.password && <p>Заполните пароль пользователя</p>}
 
         <button type="submit" className={cls.create}>

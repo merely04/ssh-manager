@@ -1,19 +1,17 @@
 import {attach, createEvent, createStore, sample} from 'effector';
 
 import * as api from '~/shared/api';
-import {CreateServer, ServerData} from '~/shared/api';
+import {ServerData} from '~/shared/api';
 
 export const getServersFx = attach({effect: api.getServersFx});
 
-const createServerFx = attach({effect: api.createServerFx});
+export const createServerFx = attach({effect: api.createServerFx});
 
 const deleteServerFx = attach({effect: api.deleteServerFx});
 
 const connectServerFx = attach({effect: api.connectServerFx});
 
 export const pageMounted = createEvent();
-
-export const createServer = createEvent<CreateServer>();
 
 export const connectServer = createEvent<ServerData>();
 
@@ -40,9 +38,4 @@ sample({
 sample({
   clock: deleteServer,
   target: deleteServerFx,
-});
-
-sample({
-  clock: createServer,
-  target: createServerFx,
 });

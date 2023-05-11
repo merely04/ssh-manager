@@ -1,7 +1,7 @@
 import {reflect} from '@effector/reflect';
 import {Link} from 'atomic-router-react';
 import {useForm} from 'effector-forms';
-import React, {useCallback, useEffect, useRef} from 'react';
+import {FormEvent, useCallback, useEffect, useRef} from 'react';
 
 import {connectionModel} from '~/entities/connection';
 
@@ -26,7 +26,7 @@ const View = (props: Props) => {
   const boxRef = useRef<HTMLDivElement | null>(null);
 
   const onFormSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
+    (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       submit();

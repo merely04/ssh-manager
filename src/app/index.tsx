@@ -1,7 +1,7 @@
 import {Pages} from '~/pages';
 
-import './index.scss';
 import {withProviders} from './providers';
+import './styles/index.scss';
 
 const App = () => {
   return <Pages />;

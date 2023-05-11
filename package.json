@@ -8,11 +8,11 @@
     "lint:fix": "yarn lint --fix",
     "pretest": "yarn lint:fix",
     "format": "prettier --config ./.prettierrc -w src/**/*.{tsx,ts} && git update-index --again",
-    "dev:eel": "venv/Scripts/python main.py --develop",
     "dev:react": "vite --port 4000",
+    "dev:eel": "venv/Scripts/python main.py --develop",
     "dev": "concurrently \"yarn dev:react\" \"yarn dev:eel\"",
     "build:react": "tsc && vite build",
-    "build:eel": "venv/Scripts/python -m eel main.py web --onefile --noconsole --name ssh-manager",
+    "build:eel": "venv/Scripts/python -m eel main.py web --onefile --name ssh-manager",
     "preview": "vite preview",
     "start": "venv/Scripts/python main.py --production",
     "prepare": "husky install"

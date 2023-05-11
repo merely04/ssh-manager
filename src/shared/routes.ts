@@ -1,6 +1,6 @@
 import {createHistoryRouter, createRoute, createRouterControls} from 'atomic-router';
 import {sample} from 'effector';
-import {createMemoryHistory} from 'history';
+import {createBrowserHistory, createMemoryHistory} from 'history';
 
 import {appStarted} from '~/shared/config/init';
 
@@ -27,6 +27,6 @@ export const router = createHistoryRouter({
 
 sample({
   clock: appStarted,
-  fn: () => createMemoryHistory(), //createBrowserHistory(),
+  fn: () => (import.meta.env.DEV ? createBrowserHistory() : createMemoryHistory()),
   target: router.setHistory,
 });

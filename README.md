@@ -10,9 +10,9 @@ The client is made according to the [fsd2](https://feature-sliced.design/) archi
 
 ## Usage
 
-Clone this repo or download via [link](https://github.com/merely04/chat-roulette-bot)
+Clone this repo or download via [link](https://github.com/merely04/ssh-manager)
 ```bash
-git clone https://github.com/merely04/chat-roulette-bot
+git clone https://github.com/merely04/ssh-manager
 ```
 
 <details>

@@ -1,29 +1,20 @@
-import {reflect} from '@effector/reflect';
-import {Link} from 'atomic-router-react';
-import React, {useState} from 'react';
-import {GoZap} from 'react-icons/go';
+import {useList, useUnit} from 'effector-react';
+import React, {memo} from 'react';
 
-import {CreateServerModal} from '~/features/create-server';
+import {CreateServerModal, createServerModel} from '~/features/create-server';
 import {DeleteServerButton} from '~/features/delete-server';
+import {OpenConnectionLink} from '~/features/open-connection';
 
 import {serverModel, ServerRow} from '~/entities/server';
 
-import {Server} from '~/shared/api';
-import {routes} from '~/shared/routes';
 import {Container} from '~/shared/ui';
+import {Button} from '~/shared/ui/button';
 
+import {$loading} from '../model';
 import cls from './index.module.scss';
 
-type Props = {
-  servers: Server[];
-  isLoading: boolean;
-  isEmpty: boolean;
-};
-
-const View = ({servers, isLoading, isEmpty}: Props) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+export const HomePage = () => {
+  const openModal = useUnit(createServerModel.open);
 
   return (
     <Container className={cls.main}>
@@ -33,56 +24,44 @@ const View = ({servers, isLoading, isEmpty}: Props) => {
         <header className={cls.header}>
           Список серверов
           <div className={cls.actions_list}>
-            <button className={cls.button} onClick={openModal}>
+            <Button onClick={openModal} className={cls.add_button}>
               + Добавить
-            </button>
-            <CreateServerModal isOpen={isModalOpen} handleClose={closeModal} />
+            </Button>
+            <CreateServerModal />
           </div>
         </header>
 
-        <div>
-          {isLoading && <p>loading...</p>}
-          {!isLoading && isEmpty && <p>No servers found</p>}
-          {!isLoading && (
-            <div className={cls.row}>
-              {servers.map((server) => {
-                return (
-                  <div key={server.id}>
-                    <ServerRow
-                      data={server}
-                      after={
-                        <>
-                          {/*<StartServerButton serverId={server.id} />*/}
-                          <Link
-                            to={routes.connection}
-                            params={{serverId: server.id}}
-                            className={cls.button}
-                          >
-                            <GoZap size={16} />
-                          </Link>
-                          <DeleteServerButton serverId={server.id} />
-                        </>
-                      }
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        <PageContent />
       </div>
     </Container>
   );
 };
 
-export const HomePage = reflect({
-  view: View,
-  bind: {
-    servers: serverModel.$servers,
-    isLoading: serverModel.$serversLoading,
-    isEmpty: serverModel.$serversEmpty,
-  },
-  hooks: {
-    mounted: serverModel.pageMounted,
-  },
+const PageContent = memo(() => {
+  const [loading, isEmpty] = useUnit([$loading, serverModel.$serversEmpty]);
+
+  const serversList = useList(serverModel.$servers, {
+    getKey: (server) => server.id,
+    fn: (server) => (
+      <div key={server.id}>
+        <ServerRow
+          data={server}
+          after={
+            <>
+              <OpenConnectionLink serverId={server.id} />
+              <DeleteServerButton serverId={server.id} />
+            </>
+          }
+        />
+      </div>
+    ),
+  });
+
+  return (
+    <div>
+      {loading && <p>Загрузка...</p>}
+      {!loading && isEmpty && <p>Ни один сервер еще не добавлен</p>}
+      {!loading && <div className={cls.row}>{serversList}</div>}
+    </div>
+  );
 });

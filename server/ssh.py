@@ -9,9 +9,9 @@ history = {}
 
 def get_ssh_client(server: Server):
     try:
-        client = clients[id]
+        client = clients[server.id]
     except:
-        print('creating connection')
+        print(f'creating connection, {server.name}')
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(hostname=server.host, username=server.username, password=server.password)
@@ -27,7 +27,6 @@ def exec_command(server: Server, command):
     client = get_ssh_client(server)
 
     stdin, stdout, stderr = client.exec_command(command)
-    # input = stdin.read().decode()
     output = stdout.read().decode()
     error = stderr.read().decode()
 
@@ -36,9 +35,4 @@ def exec_command(server: Server, command):
 
 
 def get_history(server: Server):
-    try:
-        return []
-    except:
-        return []
-
     pass

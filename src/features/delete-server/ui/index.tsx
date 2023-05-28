@@ -1,21 +1,20 @@
-import React, {useCallback} from 'react';
+import {useUnit} from 'effector-react';
 import {GoTrashcan} from 'react-icons/go';
 
-import {submit} from '../model';
-import cls from './index.module.scss';
+import {Button, ButtonTheme} from '~/shared/ui/button';
 
-export type DeleteServerButtonProps = {
+import {deleteButtonClick} from '../model';
+
+interface DeleteServerButtonProps {
   serverId: string;
-};
+}
 
 export const DeleteServerButton = ({serverId}: DeleteServerButtonProps) => {
-  const onButtonClick = useCallback(() => {
-    submit({id: serverId});
-  }, [serverId]);
+  const onButtonClick = useUnit(deleteButtonClick);
 
   return (
-    <button onClick={onButtonClick} className={cls.button}>
+    <Button onClick={() => onButtonClick(serverId)} theme={ButtonTheme.RED}>
       <GoTrashcan size={16} />
-    </button>
+    </Button>
   );
 };

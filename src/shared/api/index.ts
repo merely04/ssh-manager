@@ -1,6 +1,6 @@
 import {createEffect} from 'effector';
 
-import {eel} from '~/shared/eel';
+import {eel} from '../eel';
 
 export interface Server {
   id: string;
@@ -10,11 +10,7 @@ export interface Server {
   password: string;
 }
 
-export interface ServerData {
-  id: string;
-}
-
-export interface Command {
+export interface Message {
   user: string;
   server: string;
 }
@@ -36,21 +32,24 @@ export const createServerFx = createEffect<CreateServer, Server>((data) => {
   return eel.add_server(data)();
 });
 
+interface ServerData {
+  id: string;
+}
+
 export const deleteServerFx = createEffect<ServerData, void>((data) => {
   return eel.del_server(data);
 });
 
-export const connectServerFx = createEffect<ServerData, Command>((data) => {
-  console.log('connectServerFx');
+export const connectServerFx = createEffect<ServerData, Message>((data) => {
   // @ts-ignore
   return eel.connect_server({id: data.id, command: 'uptime'})();
 });
 
-export interface SendServerCommand extends ServerData {
+interface SendServerCommand extends ServerData {
   command: string;
 }
 
-export const sendServerCommandFx = createEffect<SendServerCommand, Command>((data) => {
+export const sendServerCommandFx = createEffect<SendServerCommand, Message>((data) => {
   // @ts-ignore
   return eel.send_server_command(data)();
 });

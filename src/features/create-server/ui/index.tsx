@@ -1,21 +1,18 @@
-import {sample} from 'effector';
 import {useForm} from 'effector-forms';
+import {useUnit} from 'effector-react';
 import {FormEvent, useCallback} from 'react';
 import {GoX} from 'react-icons/go';
 import Modal from 'react-modal';
 
 import {Input} from '~/shared/ui';
+import {Button} from '~/shared/ui/button';
 
-import {$form, serverCreated} from '../model';
+import {$form, $loading, $opened, close} from '../model';
 import cls from './index.module.scss';
 
-export type CreateServerModalProps = {
-  isOpen: boolean;
-  handleClose: () => void;
-};
-
-export const CreateServerModal = ({isOpen, handleClose}: CreateServerModalProps) => {
+export const CreateServerModal = () => {
   const {fields, submit} = useForm($form);
+  const [isOpen, onClose, loading] = useUnit([$opened, close, $loading]);
 
   const onFormSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
@@ -25,26 +22,26 @@ export const CreateServerModal = ({isOpen, handleClose}: CreateServerModalProps)
     [submit],
   );
 
-  sample({
-    clock: serverCreated,
-    fn: () => handleClose(),
-  });
-
   return (
     <Modal
       className={cls.modal}
       overlayClassName={cls.overlay}
       isOpen={isOpen}
-      onRequestClose={handleClose}
+      onRequestClose={onClose}
     >
       <header className={cls.header}>
         <h2>Добавление сервера</h2>
-        <button className={cls.close} onClick={handleClose}>
+        <button className={cls.close} onClick={onClose}>
           <GoX size={16} />
         </button>
       </header>
 
-      <form style={{marginTop: 20}} className={cls.row} onSubmit={onFormSubmit}>
+      <form
+        aria-disabled={loading}
+        style={{marginTop: 20}}
+        className={cls.row}
+        onSubmit={onFormSubmit}
+      >
         <Input
           isInvalid={fields.name.hasError()}
           value={fields.name.value}
@@ -75,9 +72,9 @@ export const CreateServerModal = ({isOpen, handleClose}: CreateServerModalProps)
         />
         {fields.password.hasError() && <p>Заполните пароль пользователя</p>}
 
-        <button type="submit" className={cls.create}>
+        <Button disabled={loading} fullWidth={true}>
           Создать
-        </button>
+        </Button>
       </form>
     </Modal>
   );

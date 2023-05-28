@@ -55,6 +55,7 @@ def connect_server(data):
 @eel.expose
 def send_server_command(data):
     server = Server.get_by_id(data["id"])
+    print(server.name)
     if not server:
         return
 

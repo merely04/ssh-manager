@@ -4,7 +4,8 @@ import {Link} from 'atomic-router-react';
 import {Container} from '~/shared/ui';
 
 interface LoaderProps {
-  routeBack?: RouteInstance<NonNullable<unknown>>;
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  routeBack?: RouteInstance<any>;
 }
 
 export const Loader = (props: LoaderProps) => {
@@ -13,7 +14,7 @@ export const Loader = (props: LoaderProps) => {
   return (
     <Container>
       {routeBack && <Link to={routeBack}>Назад</Link>}
-      <h1>Loading...</h1>
+      <h1>Загрузка...</h1>
     </Container>
   );
 };

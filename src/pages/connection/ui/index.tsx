@@ -1,26 +1,17 @@
-import {reflect} from '@effector/reflect';
 import {Link} from 'atomic-router-react';
 import {useForm} from 'effector-forms';
+import {useUnit} from 'effector-react';
 import {FormEvent, useCallback, useEffect, useRef} from 'react';
 
-import {connectionModel} from '~/entities/connection';
-
-import {Command} from '~/shared/api';
 import {routes} from '~/shared/routes';
 import {Container, Input} from '~/shared/ui';
 
-import {$form, currentRoute} from '../model';
+import {$form, $messages, currentRoute} from '../model';
 import cls from './index.module.scss';
 
-interface Props {
-  params: {serverId: string};
-  messages: Command[];
-  isPending: boolean;
-}
-
-const View = (props: Props) => {
-  const {params, messages, isPending} = props;
+export const ConnectionPage = () => {
   const {submit, fields} = useForm($form);
+  const [params, messages] = useUnit([currentRoute.$params, $messages]);
 
   const logRef = useRef<HTMLDivElement | null>(null);
   const boxRef = useRef<HTMLDivElement | null>(null);
@@ -28,14 +19,12 @@ const View = (props: Props) => {
   const onFormSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-
       submit();
     },
     [submit],
   );
 
   useEffect(() => {
-    console.log(boxRef.current?.children.length);
     logRef.current?.scrollIntoView();
   }, [messages]);
 
@@ -55,7 +44,7 @@ const View = (props: Props) => {
             </div>
           ))}
 
-          <div ref={logRef}>{isPending && <p>$: Loading...</p>}</div>
+          <div ref={logRef} />
         </div>
       </main>
 
@@ -71,15 +60,3 @@ const View = (props: Props) => {
     </Container>
   );
 };
-
-export const ConnectionPage = reflect<Props>({
-  view: View,
-  bind: {
-    params: currentRoute.$params,
-    messages: connectionModel.$connection,
-    isPending: connectionModel.$connectionPending,
-  },
-  hooks: {
-    mounted: connectionModel.pageMounted,
-  },
-});

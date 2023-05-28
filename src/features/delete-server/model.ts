@@ -1,12 +1,20 @@
-import {createEvent, sample} from 'effector';
+import {attach, createEvent, sample} from 'effector';
 
 import {serverModel} from '~/entities/server';
 
-import {ServerData} from '~/shared/api';
+import * as api from '~/shared/api';
 
-export const submit = createEvent<ServerData>();
+const deleteServerFx = attach({effect: api.deleteServerFx});
+export const $loading = deleteServerFx.pending;
+
+serverModel.$servers.on(deleteServerFx.done, (state, payload) =>
+  state.filter((s) => s.id !== payload.params.id),
+);
+
+export const deleteButtonClick = createEvent<string>();
 
 sample({
-  clock: submit,
-  target: serverModel.deleteServer,
+  clock: deleteButtonClick,
+  fn: (id) => ({id}),
+  target: deleteServerFx,
 });

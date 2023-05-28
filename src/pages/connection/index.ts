@@ -11,7 +11,6 @@ export const ConnectionRoute = {
   view: createRouteView({
     // @ts-ignore
     route: postLoadedRoute,
-    // @ts-ignore
     view: ConnectionPage,
     otherwise: () => Loader({routeBack: routes.home}),
   }),

@@ -1,25 +1,25 @@
 import {ReactNode} from 'react';
 
-import * as api from '~/shared/api';
+import {Server} from '~/shared/api';
 
-import styles from './index.module.scss';
+import cls from './index.module.scss';
 
 type ServerRowProps = {
-  data: api.Server;
+  data: Server;
   after?: ReactNode;
 };
 
 export const ServerRow = ({data, after}: ServerRowProps) => {
   return (
-    <div className={styles.row}>
+    <div className={cls.row}>
       <div>
-        <h2 className={styles.name}>{data.name}</h2>
-        <p className={styles.info}>
+        <h2 className={cls.name}>{data.name}</h2>
+        <p className={cls.info}>
           {data.username}@{data.host}
         </p>
       </div>
 
-      <div className={styles.actions}>{after}</div>
+      <div className={cls.actions}>{after}</div>
     </div>
   );
 };
